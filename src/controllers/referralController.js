@@ -16,7 +16,10 @@ const createReferral = async (req, res) => {
 
     await sendReferralEmail(referrerEmail, refereeEmail, referrerName, refereeName);
 
-    res.status(201).json({ message: "Referral submitted successfully!", referral: newReferral });
+    res.status(201).json({
+      message: "Referral submitted successfully!",
+      referral: newReferral,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error." });

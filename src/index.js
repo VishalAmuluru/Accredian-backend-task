@@ -2,11 +2,15 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Updated CORS to allow both frontend origins
+// Updated CORS configuration to allow local and production frontend domains
 app.use(cors({
-  origin: ["http://localhost:5173", "http://localhost:3001"],
+  origin: [
+    "http://localhost:5173",
+    "http://localhost:3001",
+    "https://accredian-frontend-task-mhsp-335a5286w-vishalamulurus-projects.vercel.app"
+  ],
   methods: ["GET", "POST"],
   credentials: true
 }));
@@ -24,7 +28,7 @@ app.get("/", (req, res) => {
   res.send("🚀 Backend is up and running!");
 });
 
-// New GET route for testing API connectivity
+// GET route for testing API connectivity
 app.get("/api/your-endpoint", (req, res) => {
   res.json({ message: "API is working!" });
 });
@@ -45,5 +49,5 @@ app.post("/api/referrals", (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
