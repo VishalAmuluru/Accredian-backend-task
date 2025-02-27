@@ -49,28 +49,32 @@ const createReferral = async (req, res) => {
 
     await sendReferralEmail(referrerEmail, refereeEmail, referrerName, refereeName);
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "Referral submitted successfully!",
       referral: newReferral,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error." });
+    console.error("Error in createReferral:", error);
+    return res.status(500).json({ error: "Internal server error." });
   }
 };
 
-app.use(cors({
-  origin: [
-    process.env.FRONTEND_URL || "http://localhost:3000",
-    "http://localhost:5173",
-    "http://localhost:3001",
-    "https://accredian-frontend-task-mhsp.vercel.app",
-    "https://accredian-frontend-task-mhsp-335a5286w-vishalamulurus-projects.vercel.app"
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}));
+// CORS configuration
+app.use(
+  cors({
+    origin: [
+      process.env.FRONTEND_URL || "http://localhost:3000",
+      "http://localhost:5173",
+      "http://localhost:3001",
+      "https://accredian-frontend-task-mhsp.vercel.app",
+      "https://accredian-frontend-task-mhsp-335a5286w-vishalamulurus-projects.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
+// Parse JSON bodies
 app.use(express.json());
 
 // Logging middleware
@@ -90,9 +94,14 @@ app.get("/api/your-endpoint", (req, res) => {
 
 app.post("/api/referrals", createReferral);
 
+// 404 handler for unmatched routes
+app.use((req, res, next) => {
+  res.status(404).json({ error: "Not Found" });
+});
+
 // Global error handling middleware
 app.use((err, req, res, next) => {
-  console.error("Error:", err.stack);
+  console.error("Unhandled Error:", err.stack);
   res.status(500).json({ message: "Internal Server Error" });
 });
 
