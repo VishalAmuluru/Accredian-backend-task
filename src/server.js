@@ -20,7 +20,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-app.use("/api/referral", referralRoutes);
+app.use("/api", referralRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running!" });
